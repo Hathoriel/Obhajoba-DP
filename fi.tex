@@ -1,10 +1,10 @@
 \documentclass[
 ]{beamer}
-
 \usepackage[czech]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{booktabs}
+
 \usetheme[
   workplace=fi,
 ]{MU}
@@ -25,7 +25,7 @@
 \section[Zadání]{Zadání}
 
 \begin{frame}{Představení zadání}{}
-Zadání diplomové práce sestávalo z vytvoření nové \structure{autentizační a autorizační infrastruktury (AAI) pro videokonferenční prostředí}. 
+Zadání diplomové práce sestávalo z vytvoření nové \structure{autentizační a autorizační infrastruktury pro videokonferenční prostředí}. 
 \\
 \medskip
 Součástí webkonferenčního prostředí jsou služby
@@ -33,12 +33,21 @@ Součástí webkonferenčního prostředí jsou služby
 
 \end{frame}
 
+\begin{frame}{Služba meetings.cesnet.cz}
+
+\includegraphics[width=\textwidth]{pics/rezervacni_system}
+\end{frame}
+
+\begin{frame}{Webkonferenční služba realizovaná technologií Adobe Connect}
+
+\includegraphics[width=\textwidth]{pics/adobe_connect.PNG}
+\end{frame}
+
 \begin{frame}{Specifikace zadání}
-Nová autentizační a autorizační infrastruktura 
+Nová autentizační a autorizační infrastruktura bude
 \begin{itemize}
-  \item bude integrována do \structure{Proxy IdP v infrastruktuře CESNETu},
-  \item bude založena na technologii \structure{OpenID Connect} a
-  \item bude navazovat na stávající AAI. 
+  \item integrována do \structure{Proxy IdP v infrastruktuře CESNETu} \cite{proxyIdpPresentation},
+  \item založena na technologii \structure{OpenID Connect} \cite{oidcPresentation}.
 \end{itemize}
 \end{frame}
 
@@ -46,7 +55,7 @@ Nová autentizační a autorizační infrastruktura
 \begin{frame}{Proxy IdP infrastruktura}
 \begin{itemize}
     \item zajišťuje bezpečný přístup ke službám \structure{CESNET eInfrastruktury},
-    \item umožňuje delegaci autentizace a autorizace ze služeb ,
+    \item umožňuje delegaci procesu autentizace a autorizace,
     \item služby a poskytovatelé identit jsou sdruženy do České akademické federace identit \structure{eduID.cz}.
 
 \end{itemize}
@@ -61,10 +70,9 @@ Protokol, umožňující aplikaci verifikovat identitu uživatele na základě a
 \medskip
 Klíčové vlastnosti:
 \begin{itemize}
-  \item autentizační vrstva nad frameworkem OAuth,
+  \item autentizační vrstva nad protokolem \structure{OAuth} \cite{rfc6749},
   \item definuje způsob získávání informací o přihlášeném uživateli,
-  \item specifikuje REST HTTP API, tzv. Endpointy,
-  \item používá JSON.
+  \item specifikuje koncové body, tzv. \structure{Endpointy}.
 \end{itemize}
 \end{frame}
 
@@ -76,11 +84,11 @@ Klíčové vlastnosti:
 
 \section[Implementace autentizační a autorizační infrastruktury]{Implementace autentizační a autorizační infrastruktury}
 
-\begin{frame}{Vypracování DP}
-\framesubtitle{Instalace Apache modulu pro OpenID Connect}
-Instalace se sestávala z
+\begin{frame}{Vypracování diplomové práce}
+\framesubtitle{Instalace a konfigurace Apache modulu pro OpenID Connect \cite{oidcConfigPresentation}}
+Integrace OpenID Connect modulu do autentizační a autorizační infrastruktury sestávala z
 \begin{itemize}
-    \item instalace knihoven pro modul \structure{mod\_auth\_openidc},
+    \item instalace modulu \structure{mod\_auth\_openidc},
     \item registrace klienta do Proxy IdP,
     \item konfigurace modulu \structure{mod\_auth\_openidc}.
 \end{itemize}
@@ -91,32 +99,37 @@ Instalace se sestávala z
 \includegraphics[width=\textwidth]{pics/oidcRegistration}
 \end{frame}
 
-\begin{frame}{Vypracování DP}
-\framesubtitle{Autentizační vrstva systému Adobe Connect}
+\begin{frame}{Vypracování diplomové práce}
+\framesubtitle{Autentizační vrstva služby Adobe Connect}
 Navrhl a implementoval jsem
 \begin{itemize}
     \item přemapování uživatelských atributů,
-    \item logiku vytváření nových uživatelů v systému Adobe Connect.
+    \item logiku vytváření nových uživatelů ve službě Adobe Connect.
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Vypracování DP}
-\framesubtitle{Autentizační a autorizační vrstva systému meetings.cesnet.cz}
-Implementoval jsem
+\begin{frame}{Vypracování diplomové práce}
+\framesubtitle{Autentizační a autorizační vrstva služby meetings.cesnet.cz}
+Navrhl a implementoval jsem
 \begin{itemize}
     \item novou autentizační a autorizační logiku na serveru \structure{shongo-auth.cesnet.cz},
-    \item zpracování a uložení uživatelských dat získaných z webové služby \structure{Perun},
-    \item adaptaci systému \structure{meetings.cesnet.cz} na novou autentizační a autorizační vrstvu.
+    \item odstranění závislosti na webové službě \structure{Perun} \cite{perunPresentation},
+    \item adaptaci služby \structure{meetings.cesnet.cz} na novou autentizační a autorizační vrstvu.
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Vypracování DP}
+\begin{frame}{Schéma komunikace při zpracování autentizačního požadavku ve stávající infrastruktuře}
+
+\includegraphics[width=\textwidth]{pics/meetings-perun-obhajoba.png}
+\end{frame}
+
+\begin{frame}{Vypracování diplomové práce}
 \framesubtitle{Implementace na straně serveru shongo-auth.cesnet.cz}
 
 Autentizační a autorizační komponenta mezi poskytovatelem \structure{OpenID Connect} a službou \structure{meetings.cesnet.cz}.
 \\
 \medskip
-Na straně serveru \structure{shongo-auth.cesnet.cz} jsem navrhl a implementoval 
+Zde jsem navrhl a implementoval 
 \begin{itemize}
     \item delegování autentizace na autorizační server OpenID Connect,
     \item získání a zpracovaní uživatelských atributů po autentizaci,
@@ -124,29 +137,41 @@ Na straně serveru \structure{shongo-auth.cesnet.cz} jsem navrhl a implementoval
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Vypracování DP}
-\framesubtitle{zpracování uživatelských dat z webové služby Perun}
+\begin{frame}{Vypracování diplomové práce}
+\framesubtitle{Odstranění závislosti na webové službě Perun}
 Perun je služba určená pro správu uživatelů v eInfrastruktuře. 
 \\
 \medskip
-Implementoval jsem algoritmus, který prostřednictvím \structure{API systému Perunu}  
+Implementoval jsem algoritmus, který prostřednictvím jednorázového využití \structure{webové služby Perun}  
 \begin{itemize}
-    \item nahradil identifikátory uživatele a
-    \item uložil dodatečné uživatelské informace do databáze systému \structure{meetings.cesnet.cz}.
+    \item nahradil identifikátory uživatele,
+    \item uložil dodatečné uživatelské informace do databáze služby \structure{meetings.cesnet.cz}.
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}{Vypracování DP}
-\framesubtitle{Adaptace systému meetings.cesnet.cz na novou autentizační a autorizační vrstvu}
-Adaptace systému \structure{meetings.cesnet.cz} nově vytvořenou autentizační a autorizační vrstvu sestávala z 
+\begin{frame}{Vypracování diplomové práce}
+\framesubtitle{Adaptace služby meetings.cesnet.cz na novou autentizační a autorizační vrstvu}
+Adaptace sestávala z 
 
 \begin{itemize}
     \item napojení na nové endpointy využívající OpenID Connect,
-    \item využití uložených uživatelských informací,
+    \item využití zpracovaných uživatelských informací,
     \item odstranění nepotřebných volání služby Perun.
 \end{itemize}
 
+\end{frame}
+
+\begin{frame}{Schéma komunikace při zpracování autentizačního požadavku}
+
+\includegraphics[width=\textwidth]{pics/meetings-oidc-obhajoba.png}
+\end{frame}
+
+\section[Zdroje]{Zdroje}
+
+\begin{frame}[allowframebreaks]{Zdroje}
+\bibliographystyle{ieeetr}
+\bibliography{example}
 \end{frame}
 
 
