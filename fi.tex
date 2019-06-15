@@ -14,7 +14,7 @@
 \subtitle[Short Presentation Subtitle]{Obhajoba diplomové práce}
 \author[L.\,Kotol]{Bc. Lukáš Kotol \\ 433265@mail.muni.cz}
 \institute[FI MU]{Fakulta informatiky, Masarykova Univerzita}
-\date{\today}
+\date{18. června 2019}
 \subject{Presentation Subject}
 \keywords{the, presentation, keywords}
 
@@ -24,16 +24,7 @@
 
 \section[Zadání]{Zadání}
 
-\begin{frame}{Představení zadání}{}
-Zadání diplomové práce sestávalo z vytvoření nové \structure{autentizační a autorizační infrastruktury pro videokonferenční prostředí}. 
-\\
-\medskip
-Součástí webkonferenčního prostředí jsou služby
-\structure{meetings.cesnet.cz} a \structure{Adobe Connect}.
-
-\end{frame}
-
-\begin{frame}{Služba meetings.cesnet.cz}
+\begin{frame}{Rezervační služba Meetings}
 
 \includegraphics[width=\textwidth]{pics/rezervacni_system}
 \end{frame}
@@ -43,20 +34,36 @@ Součástí webkonferenčního prostředí jsou služby
 \includegraphics[width=\textwidth]{pics/adobe_connect.PNG}
 \end{frame}
 
+\begin{frame}{Schéma komunikace při zpracování autentizačního požadavku ve stávající infrastruktuře}
+
+\includegraphics[width=\textwidth]{pics/meetings-old.png}
+\end{frame}
+
+\begin{frame}{Schéma komunikace při zpracování autentizačního požadavku ve stávající infrastruktuře}
+
+\includegraphics[width=\textwidth]{pics/meetongs-old-crash.png}
+\end{frame}
+
+\begin{frame}{Schéma komunikace při zpracování autentizačního požadavku}
+
+\includegraphics[width=\textwidth]{pics/oidc-new.png}
+\end{frame}
+
 \begin{frame}{Specifikace zadání}
 Nová autentizační a autorizační infrastruktura bude
 \begin{itemize}
-  \item integrována do \structure{Proxy IdP v infrastruktuře CESNETu} \cite{proxyIdpPresentation},
-  \item založena na technologii \structure{OpenID Connect} \cite{oidcPresentation}.
+  \item integrována do \structure{Proxy IdP v infrastruktuře CESNETu},
+  \item založena na technologii \structure{OpenID Connect}, 
+  \item navazovat na stávající.
 \end{itemize}
 \end{frame}
 
 \section[Proxy Idp]{Proxy Idp}
 \begin{frame}{Proxy IdP infrastruktura}
 \begin{itemize}
-    \item zajišťuje bezpečný přístup ke službám \structure{CESNET eInfrastruktury},
-    \item umožňuje delegaci procesu autentizace a autorizace,
-    \item služby a poskytovatelé identit jsou sdruženy do České akademické federace identit \structure{eduID.cz}.
+    \item sdružuje služby a poskytovatele identit,
+    \item zajišťuje bezpečný přístup ke službám \structure{CESNET eInfrastruktury} a uživatelským atributům,
+    \item umožňuje delegaci procesu autentizace a autorizace.
 
 \end{itemize}
 \end{frame}
@@ -70,33 +77,52 @@ Protokol, umožňující aplikaci verifikovat identitu uživatele na základě a
 \medskip
 Klíčové vlastnosti:
 \begin{itemize}
-  \item autentizační vrstva nad protokolem \structure{OAuth} \cite{rfc6749},
+  \item autentizační vrstva nad protokolem \structure{OAuth},
   \item definuje způsob získávání informací o přihlášeném uživateli,
   \item specifikuje koncové body, tzv. \structure{Endpointy}.
 \end{itemize}
 \end{frame}
 
 \begin{frame}{OpenID Connect}
-\framesubtitle{Schéma komunikace v protokolu}
-\includegraphics[width=\textwidth]{pics/diplomkaOIDC}
+\includegraphics[width=300px,height=200px]{pics/authorization_code_access.png} \\
+\begin{tiny}
+(https://medium.com/@darutk/diagrams-of-all-the-openid-connect-flows-6968e3990660)
+\end{tiny}
+\end{frame}
+
+\begin{frame}{OpenID Connect}
+\includegraphics[width=300px,height=200px]{pics/authorization_code_both.png} \\
+\begin{tiny}
+(https://medium.com/@darutk/diagrams-of-all-the-openid-connect-flows-6968e3990660)
+\end{tiny}
+\end{frame}
+
+\begin{frame}{OpenID Connect}
+\includegraphics[width=300px,height=200px]{pics/both.png} \\
+
+\begin{tiny}
+(https://medium.com/@darutk/diagrams-of-all-the-openid-connect-flows-6968e3990660)
+\end{tiny}
 \end{frame}
 
 
 \section[Implementace autentizační a autorizační infrastruktury]{Implementace autentizační a autorizační infrastruktury}
 
 \begin{frame}{Vypracování diplomové práce}
-\framesubtitle{Instalace a konfigurace Apache modulu pro OpenID Connect \cite{oidcConfigPresentation}}
-Integrace OpenID Connect modulu do autentizační a autorizační infrastruktury sestávala z
+\framesubtitle{Autentizační a autorizační systém shongo-auth.cesnet.cz}
+Zde jsem provedl
 \begin{itemize}
-    \item instalace modulu \structure{mod\_auth\_openidc},
-    \item registrace klienta do Proxy IdP,
-    \item konfigurace modulu \structure{mod\_auth\_openidc}.
+    \item registraci klienta do Proxy IdP,
+    \item instalaci modulu pro integraci s OpenID Connect.
 \end{itemize}
-\end{frame}
 
-\begin{frame}{Registrace klienta do Proxy IdP}
+Dále jsem zde implementoval
+\begin{itemize}
+     \item delegování autentizace na autentizační server OpenID Connect,
+    \item  získání a zpracovaní uživatelských atributů po autentizaci,
+    \item  autorizační logiku.
+\end{itemize}
 
-\includegraphics[width=\textwidth]{pics/oidcRegistration}
 \end{frame}
 
 \begin{frame}{Vypracování diplomové práce}
@@ -108,70 +134,37 @@ Navrhl a implementoval jsem
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Vypracování diplomové práce}
-\framesubtitle{Autentizační a autorizační vrstva služby meetings.cesnet.cz}
-Navrhl a implementoval jsem
-\begin{itemize}
-    \item novou autentizační a autorizační logiku na serveru \structure{shongo-auth.cesnet.cz},
-    \item odstranění závislosti na webové službě \structure{Perun} \cite{perunPresentation},
-    \item adaptaci služby \structure{meetings.cesnet.cz} na novou autentizační a autorizační vrstvu.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Schéma komunikace při zpracování autentizačního požadavku ve stávající infrastruktuře}
-
-\includegraphics[width=\textwidth]{pics/meetings-perun-obhajoba.png}
-\end{frame}
-
-\begin{frame}{Vypracování diplomové práce}
-\framesubtitle{Implementace na straně serveru shongo-auth.cesnet.cz}
-
-Autentizační a autorizační komponenta mezi poskytovatelem \structure{OpenID Connect} a službou \structure{meetings.cesnet.cz}.
-\\
-\medskip
-Zde jsem navrhl a implementoval 
-\begin{itemize}
-    \item delegování autentizace na autorizační server OpenID Connect,
-    \item získání a zpracovaní uživatelských atributů po autentizaci,
-    \item autorizační logiku. 
-\end{itemize}
-\end{frame}
 
 \begin{frame}{Vypracování diplomové práce}
 \framesubtitle{Odstranění závislosti na webové službě Perun}
 Perun je služba určená pro správu uživatelů v eInfrastruktuře. 
 \\
 \medskip
-Implementoval jsem algoritmus, který prostřednictvím jednorázového využití \structure{webové služby Perun}  
+Implementoval jsem algoritmus, který prostřednictvím jednorázového využití \structure{webové služby Perun} 
 \begin{itemize}
     \item nahradil identifikátory uživatele,
-    \item uložil dodatečné uživatelské informace do databáze služby \structure{meetings.cesnet.cz}.
+    \item uložil dodatečné uživatelské informace do databáze služby \structure{Meetings}.
 \end{itemize}
 \end{frame}
 
 
 \begin{frame}{Vypracování diplomové práce}
-\framesubtitle{Adaptace služby meetings.cesnet.cz na novou autentizační a autorizační vrstvu}
+\framesubtitle{Adaptace služby Meetings na novou autentizační a autorizační vrstvu}
 Adaptace sestávala z 
 
 \begin{itemize}
     \item napojení na nové endpointy využívající OpenID Connect,
-    \item využití zpracovaných uživatelských informací,
-    \item odstranění nepotřebných volání služby Perun.
+    \item využití zpracovaných uživatelských informací.
 \end{itemize}
 
 \end{frame}
 
+
+
+
 \begin{frame}{Schéma komunikace při zpracování autentizačního požadavku}
 
-\includegraphics[width=\textwidth]{pics/meetings-oidc-obhajoba.png}
-\end{frame}
-
-\section[Zdroje]{Zdroje}
-
-\begin{frame}[allowframebreaks]{Zdroje}
-\bibliographystyle{ieeetr}
-\bibliography{example}
+\includegraphics[width=\textwidth]{pics/oidc-new.png}
 \end{frame}
 
 
