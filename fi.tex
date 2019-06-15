@@ -41,7 +41,7 @@
 
 \begin{frame}{Schéma komunikace při zpracování autentizačního požadavku ve stávající infrastruktuře}
 
-\includegraphics[width=\textwidth]{pics/meetongs-old-crash.png}
+\includegraphics[width=\textwidth]{pics/meetings-old-crash.png}
 \end{frame}
 
 \begin{frame}{Schéma komunikace při zpracování autentizačního požadavku}
@@ -49,7 +49,7 @@
 \includegraphics[width=\textwidth]{pics/oidc-new.png}
 \end{frame}
 
-\begin{frame}{Specifikace zadání}
+\begin{frame}{Návrh řešení}
 Nová autentizační a autorizační infrastruktura bude
 \begin{itemize}
   \item integrována do \structure{Proxy IdP v infrastruktuře CESNETu},
@@ -62,7 +62,7 @@ Nová autentizační a autorizační infrastruktura bude
 \begin{frame}{Proxy IdP infrastruktura}
 \begin{itemize}
     \item sdružuje služby a poskytovatele identit,
-    \item zajišťuje bezpečný přístup ke službám \structure{CESNET eInfrastruktury} a uživatelským atributům,
+    \item zajišťuje bezpečný přístup ke službám \structure{CESNET eInfrastruktury} a garantuje dostupnost uživatelských atributů,
     \item umožňuje delegaci procesu autentizace a autorizace.
 
 \end{itemize}
@@ -109,14 +109,9 @@ Klíčové vlastnosti:
 \section[Implementace autentizační a autorizační infrastruktury]{Implementace autentizační a autorizační infrastruktury}
 
 \begin{frame}{Vypracování diplomové práce}
-\framesubtitle{Autentizační a autorizační systém shongo-auth.cesnet.cz}
-Zde jsem provedl
-\begin{itemize}
-    \item registraci klienta do Proxy IdP,
-    \item instalaci modulu pro integraci s OpenID Connect.
-\end{itemize}
+\framesubtitle{Implementace autentizačního a autorizačního procesu}
 
-Dále jsem zde implementoval
+Na základě návrhu jsem implementoval
 \begin{itemize}
      \item delegování autentizace na autentizační server OpenID Connect,
     \item  získání a zpracovaní uživatelských atributů po autentizaci,
@@ -136,30 +131,15 @@ Navrhl a implementoval jsem
 
 
 \begin{frame}{Vypracování diplomové práce}
-\framesubtitle{Odstranění závislosti na webové službě Perun}
-Perun je služba určená pro správu uživatelů v eInfrastruktuře. 
-\\
-\medskip
-Implementoval jsem algoritmus, který prostřednictvím jednorázového využití \structure{webové služby Perun} 
+\framesubtitle{Reimplementace správy uživatelů v systému Meetings}
+
+Uživatelské údaje se využívaly při
 \begin{itemize}
-    \item nahradil identifikátory uživatele,
-    \item uložil dodatečné uživatelské informace do databáze služby \structure{Meetings}.
+    \item rezervaci požadavků,
+    \item notifikaci,
+    \item přidávání dalších uživatelů do místnosti. 
 \end{itemize}
 \end{frame}
-
-
-\begin{frame}{Vypracování diplomové práce}
-\framesubtitle{Adaptace služby Meetings na novou autentizační a autorizační vrstvu}
-Adaptace sestávala z 
-
-\begin{itemize}
-    \item napojení na nové endpointy využívající OpenID Connect,
-    \item využití zpracovaných uživatelských informací.
-\end{itemize}
-
-\end{frame}
-
-
 
 
 \begin{frame}{Schéma komunikace při zpracování autentizačního požadavku}
